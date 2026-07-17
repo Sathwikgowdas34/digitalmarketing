@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}{{ creator.display_name }} - CreatorHub{% endblock %}
+
+{% block content %}
+<div class="w-full">
+    <!-- Cover Image -->
+    <div class="w-full h-64 bg-gradient-to-r from-purple-500 to-purple-600">
+        {% if creator.cover_image %}
+        <img src="{{ creator.cover_image }}" alt="Cover" class="w-full h-full object-cover">
+        {% endif %}
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Creator Header -->
+        <div class="flex flex-col md:flex-row items-start md:items-end space-y-4 md:space-y-0 md:space-x-6 mb-12">
+            <img src="https://via.placeholder.com/150x150" alt="{{ creator.display_name }}" class="w-32 h-32 rounded-full border-4 border-white shadow-lg -mt-16">
+            <div class="flex-1">
+                <h1 class="text-4xl font-bold text-gray-900">{{ creator.display_name }}</h1>
+                <p class="text-gray-600 mt-2">{{ creator.bio }}</p>
+                <div class="flex items-center space-x-6 mt-4">
+                    <div>
+                        <p class="text-gray-600 text-sm">Followers</p>
+                        <p class="text-2xl font-bold text-purple-600">{{ creator.total_followers }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm">Products</p>
+                        <p class="text-2xl font-bold text-purple-600">{{ products.total }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm">Total Sales</p>
+                        <p class="text-2xl font-bold text-purple-600">₹{{ creator.total_revenue }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex space-x-4">
+                {% if current_user.is_authenticated %}
+                    {% if is_following %}
+                    <button onclick="unfollow()" class="bg-gray-300 text-gray-900 px-6 py-3 rounded-lg font-bold hover:bg-gray-400">
+                        Following
+                    </button>
+                    {% else %}
+                    <button onclick="follow()" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-purple-700">
+                        Follow
+                    </button>
+                    {% endif %}
+                {% endif %}
+                <button class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700">
+                    <i class="fas fa-heart mr-2"></i>Support
+                </button>
+            </div>
+        </div>
+
+        <!-- Social Links -->
+        {% if creator.social_links %}
+        <div class="mb-12 pb-8 border-b">
+            <p class="text-sm text-gray-600 mb-4">Follow on Social Media</p>
+            <div class="flex space-x-4">
+                {% for platform, url in creator.social_links.items() %}
+                <a href="{{ url }}" target="_blank" class="text-purple-600 hover:text-purple-700">
+                    <i class="fab fa-{{ platform }} text-2xl"></i>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Products -->
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Products</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {% for product in products.items %}
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl smooth-transition">
+                    <img src="https://via.placeholder.com/300x200" alt="{{ product.title }}" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-900 mb-2">{{ product.title[:30] }}</h3>
+                        <p class="text-2xl font-bold text-purple-600 mb-2">₹{{ product.get_discounted_price() }}</p>
+                        <a href="{{ url_for('products.detail', slug=product.slug) }}" class="block text-center bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">View Product</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function follow() {
+    // Follow functionality
+    alert('Follow functionality');
+}
+
+function unfollow() {
+    // Unfollow functionality
+    alert('Unfollow functionality');
+}
+</script>
+{% endblock %}

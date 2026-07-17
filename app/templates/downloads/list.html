@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}My Downloads - CreatorHub{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">My Downloads</h1>
+
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <table class="w-full">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-6 py-3 text-left font-bold text-gray-900">Product</th>
+                    <th class="px-6 py-3 text-left font-bold text-gray-900">Downloaded</th>
+                    <th class="px-6 py-3 text-left font-bold text-gray-900">Expires</th>
+                    <th class="px-6 py-3 text-center font-bold text-gray-900">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for download in downloads.items %}
+                <tr class="border-t hover:bg-gray-50">
+                    <td class="px-6 py-4 text-gray-900">{{ download.product.title }}</td>
+                    <td class="px-6 py-4 text-gray-700">{{ download.download_count }}</td>
+                    <td class="px-6 py-4 text-gray-700">{{ download.expires_at | date_format if download.expires_at else 'Never' }}</td>
+                    <td class="px-6 py-4 text-center">
+                        {% if download.can_download() %}
+                        <a href="{{ url_for('downloads.download', token=download.token) }}" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                            <i class="fas fa-download mr-2"></i>Download
+                        </a>
+                        {% else %}
+                        <span class="text-gray-500">Expired</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}FAQs - CreatorHub{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="text-4xl font-bold text-gray-900 mb-12">Frequently Asked Questions</h1>
+
+    <div class="space-y-6" x-data="{ open: null }">
+        {% set faqs = [
+            ('How do I become a creator?', 'To become a creator, sign up for an account, complete your profile, and click "Become a Creator". You can then start uploading your digital products.'),
+            ('What file types are supported?', 'We support PDF, ZIP, EPUB, DOCX, PPTX, XLSX, MP4, MP3, TXT, Python, JavaScript, HTML, CSS and more.'),
+            ('What payment methods do you accept?', 'We accept payments via Stripe (credit cards) and Razorpay (UPI, cards, wallets, and more).'),
+            ('How do I get paid?', 'Payments are processed directly to your linked bank account. You can withdraw earnings anytime.'),
+            ('What is your commission?', 'CreatorHub takes a small commission on each sale. Check our pricing page for current rates.'),
+            ('How secure is my data?', 'We use industry-standard encryption and security protocols to protect your data and transactions.'),
+        ] %}
+        {% for question, answer in faqs %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <button @click="open = open === {{ loop.index0 }} ? null : {{ loop.index0 }}" class="w-full px-6 py-4 text-left font-bold text-gray-900 hover:bg-gray-50 flex justify-between items-center">
+                {{ question }}
+                <i class="fas fa-chevron-down" :class="{ 'rotate-180': open === {{ loop.index0 }} }"></i>
+            </button>
+            <div x-show="open === {{ loop.index0 }}" class="px-6 py-4 text-gray-700 border-t">
+                {{ answer }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

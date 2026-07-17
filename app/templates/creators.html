@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Creators - CreatorHub{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Discover Creators</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {% for creator in creators.items %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl smooth-transition">
+            <img src="https://via.placeholder.com/300x150" alt="{{ creator.display_name }}" class="w-full h-32 object-cover">
+            <div class="p-4">
+                <h3 class="font-bold text-lg text-gray-900 mb-1">{{ creator.display_name }}</h3>
+                <p class="text-gray-600 text-sm mb-3">{{ creator.bio[:60] }}...</p>
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-purple-600 font-semibold">{{ creator.total_followers }} followers</span>
+                </div>
+                <a href="{{ url_for('creator.profile', slug=creator.slug) }}" class="block text-center bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">View Profile</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

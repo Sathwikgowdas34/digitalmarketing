@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - CreatorHub{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Order Summary -->
+        <div class="md:col-span-1">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
+                
+                {% for item in order.items %}
+                <div class="flex justify-between mb-4 pb-4 border-b">
+                    <div>
+                        <p class="font-semibold text-gray-900">{{ item.product.title[:20] }}</p>
+                        <p class="text-sm text-gray-600">₹{{ item.final_price }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="mt-6 pt-4 border-t">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700">Subtotal:</span>
+                        <span class="font-semibold">₹{{ order.total_amount }}</span>
+                    </div>
+                    {% if order.discount_amount > 0 %}
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700">Discount:</span>
+                        <span class="font-semibold text-red-600">-₹{{ order.discount_amount }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="flex justify-between text-lg font-bold text-purple-600">
+                        <span>Total:</span>
+                        <span>₹{{ order.final_amount }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="md:col-span-2">
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-6">Choose Payment Method</h2>
+
+                <!-- Stripe -->
+                <div class="mb-6 p-6 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-600" onclick="selectPayment('stripe')">
+                    <div class="flex items-center">
+                        <input type="radio" id="stripe-radio" name="payment_method" value="stripe" class="w-4 h-4">
+                        <label for="stripe-radio" class="ml-4 cursor-pointer flex-1">
+                            <p class="font-bold text-gray-900">Credit/Debit Card</p>
+                            <p class="text-sm text-gray-600">Secure payment with Stripe</p>
+                        </label>
+                        <img src="https://via.placeholder.com/80x50" alt="Stripe" class="h-10">
+                    </div>
+                </div>
+
+                <!-- Razorpay -->
+                <div class="mb-6 p-6 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-600" onclick="selectPayment('razorpay')">
+                    <div class="flex items-center">
+                        <input type="radio" id="razorpay-radio" name="payment_method" value="razorpay" class="w-4 h-4">
+                        <label for="razorpay-radio" class="ml-4 cursor-pointer flex-1">
+                            <p class="font-bold text-gray-900">Razorpay</p>
+                            <p class="text-sm text-gray-600">UPI, Card, Wallet & more</p>
+                        </label>
+                        <img src="https://via.placeholder.com/80x50" alt="Razorpay" class="h-10">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Button -->
+            <button id="pay-btn" class="w-full bg-purple-600 text-white py-3 rounded-lg font-bold hover:bg-purple-700">
+                Proceed to Payment
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function selectPayment(method) {
+    // Handle payment method selection
+    document.getElementById(method + '-radio').checked = true;
+}
+
+document.getElementById('pay-btn').addEventListener('click', function() {
+    const method = document.querySelector('input[name="payment_method"]:checked').value;
+    if (method === 'stripe') {
+        initiateStripePayment();
+    } else if (method === 'razorpay') {
+        initiateRazorpayPayment();
+    }
+});
+
+function initiateStripePayment() {
+    alert('Stripe payment initialization');
+}
+
+function initiateRazorpayPayment() {
+    alert('Razorpay payment initialization');
+}
+</script>
+{% endblock %}

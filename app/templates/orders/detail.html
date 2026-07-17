@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Order Details - CreatorHub{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">Order {{ order.order_number }}</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+                <p class="text-gray-600 text-sm">Order Date</p>
+                <p class="font-bold text-lg text-gray-900">{{ order.created_at | date_format }}</p>
+            </div>
+            <div>
+                <p class="text-gray-600 text-sm">Status</p>
+                <p class="font-bold text-lg">
+                    {% if order.status == 'completed' %}
+                    <span class="text-green-600">Completed</span>
+                    {% elif order.status == 'pending' %}
+                    <span class="text-yellow-600">Pending</span>
+                    {% else %}
+                    <span class="text-red-600">{{ order.status }}</span>
+                    {% endif %}
+                </p>
+            </div>
+            <div>
+                <p class="text-gray-600 text-sm">Total Amount</p>
+                <p class="font-bold text-lg text-purple-600">₹{{ order.final_amount }}</p>
+            </div>
+        </div>
+
+        <div class="border-t pt-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-6">Order Items</h2>
+            <div class="space-y-4">
+                {% for item in order.items %}
+                <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <div>
+                        <p class="font-bold text-gray-900">{{ item.product.title }}</p>
+                        <p class="text-gray-600 text-sm">{{ item.product.category.name }}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-gray-900">₹{{ item.final_price }}</p>
+                        {% if item.discount > 0 %}
+                        <p class="text-sm text-gray-600">Discount: {{ item.discount }}%</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="border-t mt-8 pt-8">
+            <div class="flex justify-end">
+                <div class="w-full md:w-1/3">
+                    <div class="flex justify-between mb-2 pb-2 border-b">
+                        <span class="text-gray-700">Subtotal:</span>
+                        <span class="font-bold">₹{{ order.total_amount }}</span>
+                    </div>
+                    {% if order.discount_amount > 0 %}
+                    <div class="flex justify-between mb-2 pb-2 border-b">
+                        <span class="text-gray-700">Discount:</span>
+                        <span class="font-bold text-red-600">-₹{{ order.discount_amount }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="flex justify-between text-lg">
+                        <span class="font-bold">Total:</span>
+                        <span class="font-bold text-purple-600">₹{{ order.final_amount }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
